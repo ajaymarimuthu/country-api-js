@@ -1,65 +1,187 @@
 const searchBtn=document.getElementById('btn');
+const h1text=document.getElementById('World_Countries');
 const countrydetails=document.getElementById('country-details');
 
-const heading=document.getElementsByClassName('country-heading');
+ 
+
+
+const allcountires=document.getElementById('allcountires'); 
+const topCountries=document.getElementById('topCountries'); 
+const input=document.getElementById('input-field');
+ 
+
 
 const ALL_COUNRIES="https://restcountries.com/v3.1/all";
+const COUNTRY_NAME="https://restcountries.com/v3.1/name/";
 
-var countryData=[];
+const CODE_API="https://restcountries.com/v3.1/alpha/";
+const Language_API="https://restcountries.com/v2/lang/";
+const CAPITAL_API="https://restcountries.com/v2/capital/";
+const CONTINENT="https://restcountries.com/v2/region/";
 
 
-window.onload=function(){
-  heading.innerHTML="<h2>Countries</h2>";
-}
+
+
+var countryDataArr=[];
+
+
+
+// var countryData=[];
+
+
+// window.onload=function(){
+//   heading.innerHTML="<h2>Countries</h2>";
+// }
+
 searchBtn.addEventListener("click",(e)=>{
-  // console.log("hi");
 
-  const promsiseResult=fetchApiData(ALL_COUNRIES);
-  
-
-
-  promsiseResult.then( (data)=>{
-   
-    data.forEach((element,i) => {
-
-      console.log(element);
-      displayCountry(element,i);
-      
-    });
-
-    // console.log(data);
-  } )
  
+
+  if(input.value == ""){
+    // console.log("null");
+
+    h1text.innerHTML="<h2>Oops No Country Found....</h2>";
+    
+  // fetchApiData(ALL_COUNRIES);
+   
+  }
+  else{
+    h1text.innerHTML="World Countries";
+    fetchInputCountry();
   
+  }
+ 
   e.preventDefault();
 })
+
+
+
+// --------------NAVLINk ALL_COUNRIES buttton GETTING CLICK  ----------
+
+
+allcountires.addEventListener('click',()=>{
+  // console.log("");
+   
+  h1text.innerHTML="World Countries";
+
+  fetchApiData(ALL_COUNRIES);
+  countryDataArr=[];
+ 
+})
+
+// topCountries.addEventListener('click',()=>{
+//   console.log("hi");
+//   countryDataArr= [ 
+//   {"name":"United States of America",
+//   "topLevelDomain":[".us"],"alpha2Code":"US","alpha3Code":"USA","callingCodes":["1"],"capital":"Washington, D.C.",
+//   "altSpellings":["US","USA","United States of America"],"subregion":"Northern America","region":"Americas",
+//   "population":329484123,"latlng":[38.0,-97.0],"demonym":"American","area":9629091.0,"gini":41.4,
+//   "timezones":["UTC-12:00","UTC-11:00","UTC-10:00","UTC-09:00","UTC-08:00","UTC-07:00","UTC-06:00",
+//   "UTC-05:00","UTC-04:00","UTC+10:00","UTC+12:00"],"borders":["CAN","MEX"],"nativeName":"United States",
+//   "numericCode":"840","flags":{"svg":"https://flagcdn.com/us.svg","png":"https://flagcdn.com/w320/us.png"},
+//   "currencies":[{"code":"USD","name":"United States dollar","symbol":"$"}],
+//   "languages":[{"iso639_1":"en","iso639_2":"eng","name":"English","nativeName":"English"}],
+//   "translations":{"br":"Stadoù-Unanet","pt":"Estados Unidos","nl":"Verenigde Staten",
+//   "hr":"Sjedinjene Američke Države","fa":"ایالات متحده آمریکا","de":"Vereinigte Staaten von Amerika",
+//   "es":"Estados Unidos","fr":"États-Unis","ja":"アメリカ合衆国","it":"Stati Uniti D'America",
+//   "hu":"Amerikai Egyesült Államok"},"flag":"https://flagcdn.com/us.svg",
+//   "regionalBlocs":[{"acronym":"NAFTA","name":"North American Free Trade Agreement","otherNames":["Tratado de Libre Comercio de América del Norte",
+//   "Accord de Libre-échange Nord-Américain"]}],"cioc":"USA","independent":true}]
+
+
+//   displayCountry();
+// })
+
+
+
+
+
+
+//  -------------Method to fetch  COuntry Detail based on click in UI----------- 
+// -------------Method to  fetch  COuntry Detail  based on click in UI--------- 
+
 
 const fetchApiData = async (country)=>{
 
   const response= await fetch(country);
-  const data=response.json();
-  return data; 
+  countryDataArr=[];
+  const data=await response.json();
+  console.log(data);
+
+  countryDataArr=data;
+  displayCountry();
+  countryDataArr=[];
+  console.log(countryDataArr);
+ 
+  // return data; 
 
 }
 
 
 
-function displayCountry(value,index){
 
-  // console.log(index);
 
-  // countrydetails.classList.add("d-flex")
+//  -------------Method to fetch single  COuntry Detail----------- 
+// -------------Method to  fetch single  COuntry Detail--------- 
 
-  const maindiv=document.createElement('div');
+
+
+const fetchInputCountry = async (country)=>{
+
+  if(input.value == null){
+    return;
+  }
+  const response=await fetch(`${COUNTRY_NAME}${input.value}`);
+  countryDataArr = [];
+    
+    h1text.innerHTML = `<h5>${input.value.toUpperCase()} </h5>`
+  if(response.status >= 200 && response.status < 300) {
+    const myJson = await response.json();
+    // console.log(myJson);
+    countryDataArr =myJson;
+    console.log(countryDataArr);
+} 
+else {
+    //error handle
+    console.log(response.status, response.statusText);
+    // h1text.innerHTML = "<h5>No data found.</h5>"
+    return;
+}
+
+displayCountry();
+countryDataArr =[];
+
+}
+
+
+
+
+
+
+
+
+//  -------------Method to display all the COuntry Details----------- 
+// -------------Method to display all the COuntry Details----------- 
+
+
+// function displayCountry(value,index){
+function displayCountry(){
+
+  countryDataArr.forEach(country=>{
+
+    console.log("Hi");
+
+
+    const maindiv=document.createElement('div');
   maindiv.classList.add("card");
-  // maindiv.setAttribute("width","5rem");
+ 
 
   
   const subdiv=document.createElement('div');
   subdiv.classList.add("card-body");
 
   const img=document.createElement('img');
-  img.src=value.flags.png;
+  img.src=country.flags.png;
   img.setAttribute("height","matchparent");
   img.setAttribute("width","25%");
   subdiv.append(img);
@@ -68,40 +190,77 @@ function displayCountry(value,index){
 
   const h5=document.createElement('h5');
   h5.classList.add("card-title");
-  h5.innerHTML=value.name.common;
+  h5.innerHTML=  ` Country : ${country.name.common}`;
   subdiv.append(h5);
 
 
 
    const p=document.createElement('p');
    p.classList.add("card-text")
-  p.innerHTML= value.capital;
+  p.innerHTML= ` Capital : ${country.capital}`;
   subdiv.append(p);
 
-
-
-  // const img2=document.createElement('img');
-
  
-//  img2.href=value.maps.googleMaps;
-//   img2.setAttribute("href",value.maps.googleMaps);
-//   // img2.setAttribute("width","25%");
-//   subdiv.append(img2);
-
-
   
   const p2=document.createElement('p');
   p2.classList.add("card-text")
- p2.innerHTML= value.population;
+ p2.innerHTML= ` Population : ${country.population}`;
  subdiv.append(p2);
 
 
   
  const p3=document.createElement('p');
  p3.classList.add("card-text")
-p3.innerHTML= value.timezones[0];
+p3.innerHTML=` TimeZone : ${country.timezones[0]}`;
 
-subdiv.append(p2);
+
+subdiv.append(p3);
+
+  
+const p4=document.createElement('p');
+p4.classList.add("card-text")
+p4.innerHTML=  ` Continent : ${country.continents}`;   
+
+subdiv.append(p4);
+
+
+  
+const p5=document.createElement('p');
+p5.classList.add("card-text")
+p5.innerHTML=  ` SubRegion : ${country.subregion}`;   
+
+subdiv.append(p5);
+
+  
+const p6=document.createElement('p');
+p6.classList.add("card-text")
+p6.innerHTML=  ` UnMember : ${country.unMember}`;   
+
+subdiv.append(p6);
+
+
+  
+const p7=document.createElement('p');
+p7.classList.add("card-text")
+p7.innerHTML=  ` Independent : ${country.independent}`;   
+
+subdiv.append(p7);
+
+
+  
+const p8=document.createElement('p');
+p8.classList.add("card-text")
+p8.innerHTML=  ` CountryCode : ${country.cca2}`;   
+
+subdiv.append(p8);
+
+
+// const p9=document.createElement('p');
+// p9.classList.add("card-text")
+// p9.innerHTML=  ` Currency : ${country.currencies[0]}`;   
+
+// subdiv.append(p9);
+
 
  
 
@@ -110,11 +269,10 @@ subdiv.append(p2);
 
   maindiv.append(subdiv);
   countrydetails.append(maindiv);
-
-   
-
  
-
+    
+  })
+ 
 }
 
  
