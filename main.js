@@ -1,16 +1,18 @@
 const searchBtn=document.getElementById('btn');
 const h1text=document.getElementById('World_Countries');
 const countrydetails=document.getElementById('country-details');
+const emptycontainer=document.getElementById('empty-container');
 
- 
 
 
 const allcountires=document.getElementById('allcountires'); 
 const topCountries=document.getElementById('topCountries'); 
 const input=document.getElementById('input-field');
+const clear=document.getElementById('clear');
+const region=document.getElementById('region');
+const dropdownitem=document.querySelectorAll('.dropdown-item');
+
  
-
-
 const ALL_COUNRIES="https://restcountries.com/v3.1/all";
 const COUNTRY_NAME="https://restcountries.com/v3.1/name/";
 
@@ -18,20 +20,13 @@ const CODE_API="https://restcountries.com/v3.1/alpha/";
 const Language_API="https://restcountries.com/v2/lang/";
 const CAPITAL_API="https://restcountries.com/v2/capital/";
 const CONTINENT="https://restcountries.com/v2/region/";
+const REGION="https://restcountries.com/v3.1/region/";
 
 
 
 
 var countryDataArr=[];
-
-
-
-// var countryData=[];
-
-
-// window.onload=function(){
-//   heading.innerHTML="<h2>Countries</h2>";
-// }
+ 
 
 searchBtn.addEventListener("click",(e)=>{
 
@@ -65,33 +60,66 @@ allcountires.addEventListener('click',()=>{
   h1text.innerHTML="World Countries";
 
   fetchApiData(ALL_COUNRIES);
-  countryDataArr=[];
+  // countryDataArr=[];
  
 })
 
-// topCountries.addEventListener('click',()=>{
-//   console.log("hi");
-//   countryDataArr= [ 
-//   {"name":"United States of America",
-//   "topLevelDomain":[".us"],"alpha2Code":"US","alpha3Code":"USA","callingCodes":["1"],"capital":"Washington, D.C.",
-//   "altSpellings":["US","USA","United States of America"],"subregion":"Northern America","region":"Americas",
-//   "population":329484123,"latlng":[38.0,-97.0],"demonym":"American","area":9629091.0,"gini":41.4,
-//   "timezones":["UTC-12:00","UTC-11:00","UTC-10:00","UTC-09:00","UTC-08:00","UTC-07:00","UTC-06:00",
-//   "UTC-05:00","UTC-04:00","UTC+10:00","UTC+12:00"],"borders":["CAN","MEX"],"nativeName":"United States",
-//   "numericCode":"840","flags":{"svg":"https://flagcdn.com/us.svg","png":"https://flagcdn.com/w320/us.png"},
-//   "currencies":[{"code":"USD","name":"United States dollar","symbol":"$"}],
-//   "languages":[{"iso639_1":"en","iso639_2":"eng","name":"English","nativeName":"English"}],
-//   "translations":{"br":"Stadoù-Unanet","pt":"Estados Unidos","nl":"Verenigde Staten",
-//   "hr":"Sjedinjene Američke Države","fa":"ایالات متحده آمریکا","de":"Vereinigte Staaten von Amerika",
-//   "es":"Estados Unidos","fr":"États-Unis","ja":"アメリカ合衆国","it":"Stati Uniti D'America",
-//   "hu":"Amerikai Egyesült Államok"},"flag":"https://flagcdn.com/us.svg",
-//   "regionalBlocs":[{"acronym":"NAFTA","name":"North American Free Trade Agreement","otherNames":["Tratado de Libre Comercio de América del Norte",
-//   "Accord de Libre-échange Nord-Américain"]}],"cioc":"USA","independent":true}]
 
+dropdownitem.forEach((val)=>{
+   val.addEventListener('click',()=>{
+    // console.log(val.text);
 
-//   displayCountry();
-// })
+    fetchApiData(`${REGION}${val.text}`);
+   })
+})
 
+ 
+clear.addEventListener('click',()=>{   
+  // countrydetails.classList.add("hide");
+
+  // console.log("click");
+  displayEmptyCountry();
+ 
+
+})
+
+topCountries.addEventListener('click',()=>{
+  console.log("hi");
+
+  countryDataArr= [ 
+  {"name":"United States of America",
+  "topLevelDomain":[".us"],"alpha2Code":"US","alpha3Code":"USA","callingCodes":["1"],"capital":"Washington, D.C.",
+  "altSpellings":["US","USA","United States of America"],"subregion":"Northern America","region":"Americas",
+  "population":329484123,"latlng":[38.0,-97.0],"demonym":"American","area":9629091.0,"gini":41.4,
+  "timezones":["UTC-12:00","UTC-11:00","UTC-10:00","UTC-09:00","UTC-08:00","UTC-07:00","UTC-06:00",
+  "UTC-05:00","UTC-04:00","UTC+10:00","UTC+12:00"],"borders":["CAN","MEX"],"nativeName":"United States",
+  "numericCode":"840","flags":{"svg":"https://flagcdn.com/us.svg","png":"https://flagcdn.com/w320/us.png"},
+  "currencies":[{"code":"USD","name":"United States dollar","symbol":"$"}],
+  "languages":[{"iso639_1":"en","iso639_2":"eng","name":"English","nativeName":"English"}],
+  "translations":{"br":"Stadoù-Unanet","pt":"Estados Unidos","nl":"Verenigde Staten",
+  "hr":"Sjedinjene Američke Države","fa":"ایالات متحده آمریکا","de":"Vereinigte Staaten von Amerika",
+  "es":"Estados Unidos","fr":"États-Unis","ja":"アメリカ合衆国","it":"Stati Uniti D'America",
+  "hu":"Amerikai Egyesült Államok"},"flag":"https://flagcdn.com/us.svg",
+  "regionalBlocs":[{"acronym":"NAFTA","name":"North American Free Trade Agreement","otherNames":["Tratado de Libre Comercio de América del Norte",
+  "Accord de Libre-échange Nord-Américain"]}],"cioc":"USA","independent":true},
+
+ {"name":"India","topLevelDomain":[".in"],
+  "alpha2Code":"IN","alpha3Code":"IND","callingCodes":["91"],"capital":"New Delhi","altSpellings":["IN","Bhārat","Republic of India",
+  "Bharat Ganrajya"],"subregion":"Southern Asia","region":"Asia","population":1380004385,"latlng":[20.0,77.0],"demonym":"Indian",
+  "area":3287590.0,"gini":35.7,"timezones":["UTC+05:30"],"borders":["AFG","BGD","BTN","MMR","CHN","NPL","PAK","LKA"],"nativeName":"भारत",
+  "numericCode":"356","flags":{"svg":"https://flagcdn.com/in.svg","png":"https://flagcdn.com/w320/in.png"},
+  "currencies":[{"code":"INR","name":"Indian rupee","symbol":"₹"}],"languages":[{"iso639_1":"hi","iso639_2":"hin",
+  "name":"Hindi","nativeName":"हिन्दी"},{"iso639_1":"en","iso639_2":"eng","name":"English","nativeName":"English"}],
+  "translations":{"br":"India","pt":"Índia","nl":"India","hr":"Indija","fa":"هند","de":"Indien","es":"India",
+  "fr":"Inde","ja":"インド","it":"India","hu":"India"},"flag":"https://flagcdn.com/in.svg",
+  "regionalBlocs":[{"acronym":"SAARC","name":"South Asian Association for Regional Cooperation"}],
+  "cioc":"IND","independent":true}
+
+]
+  
+  displayCountry();
+   
+})
 
 
 
@@ -111,7 +139,7 @@ const fetchApiData = async (country)=>{
   countryDataArr=data;
   displayCountry();
   countryDataArr=[];
-  console.log(countryDataArr);
+  // console.log(countryDataArr);
  
   // return data; 
 
@@ -127,6 +155,8 @@ const fetchApiData = async (country)=>{
 
 
 const fetchInputCountry = async (country)=>{
+
+  
 
   if(input.value == null){
     return;
@@ -156,9 +186,20 @@ countryDataArr =[];
 
 
 
+//  -------------Method to display Empty Container----------- 
+// -------------Method to display  Empty Containe----------- 
 
 
 
+function displayEmptyCountry(){
+
+  const div=document.createElement('div');
+
+  empty-container.append(div);
+
+}
+
+ 
 
 //  -------------Method to display all the COuntry Details----------- 
 // -------------Method to display all the COuntry Details----------- 
@@ -167,9 +208,11 @@ countryDataArr =[];
 // function displayCountry(value,index){
 function displayCountry(){
 
+
+
   countryDataArr.forEach(country=>{
 
-    console.log("Hi");
+    // console.log("Hi");
 
 
     const maindiv=document.createElement('div');
@@ -185,6 +228,12 @@ function displayCountry(){
   img.setAttribute("height","matchparent");
   img.setAttribute("width","25%");
   subdiv.append(img);
+
+//   const img=document.createElement('background-image');
+//    img.url=country.flags.png;
+//   img.setAttribute("height","matchparent");
+//  img.setAttribute("width","25%");
+//  subdiv.append(img);
 
 
 
